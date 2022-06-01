@@ -38,13 +38,13 @@ class MenuButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-        onPressed: onPress, 
-        child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+        onPressed: onPress,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color?>(Colors.blue),
           fixedSize: MaterialStateProperty.all<Size>(const Size(145, 50)),
-        ),
-          ),
+        ), 
+        child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+      ),
     );
   }
 }

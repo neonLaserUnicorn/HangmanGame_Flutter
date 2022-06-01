@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hangman/models/screen_model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class GameModel extends ChangeNotifier
 {
@@ -29,6 +30,7 @@ class GameModel extends ChangeNotifier
 
   Future gameOver() async
   {
+    
     return Future.delayed(const Duration(seconds: 1), 
       ()=>Navigator.of(_context).pushReplacementNamed('/'));
   }

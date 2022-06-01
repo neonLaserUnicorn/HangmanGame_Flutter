@@ -54,15 +54,15 @@ class _AlphaButtonState extends State<AlphaButton> {
             // setState(() {});
           }
         },
-        
-        child: Text(widget.value, style: Theme.of(context).textTheme.bodySmall,),
         style: ButtonStyle(
             elevation: MaterialStateProperty.all<double?>(elev),
             splashFactory: NoSplash.splashFactory,
             backgroundColor: color,
             minimumSize: MaterialStateProperty.all<Size>(const Size(20, 20)),
             maximumSize: MaterialStateProperty.all<Size>(const Size(40, 40)),
-          ), ),
+          ),
+        
+        child: Text(widget.value, style: Theme.of(context).textTheme.bodySmall,), ),
     );
   }
 }

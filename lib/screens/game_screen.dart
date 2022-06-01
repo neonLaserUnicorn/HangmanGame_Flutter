@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hangman/models/screen_model.dart';
 import 'package:hangman/utilities/h_keyboard.dart';
 import 'package:hangman/models/game_model.dart';
 
@@ -139,6 +138,7 @@ class _LivesWidgetState extends State<LivesWidget> {
     return Expanded(
       child: Center(
         child: Stack(
+          alignment: Alignment.center,
           children: [
             const Icon(Icons.favorite, color: Colors.white, size: 40,),
             Text('$text',style: const TextStyle(
@@ -148,7 +148,6 @@ class _LivesWidgetState extends State<LivesWidget> {
               )
             ),
           ],
-          alignment: Alignment.center,
         ),
       ),
     );
