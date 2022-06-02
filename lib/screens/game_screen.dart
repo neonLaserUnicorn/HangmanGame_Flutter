@@ -56,7 +56,7 @@ class WordWidget extends StatefulWidget {
 
 class _WordWidgetState extends State<WordWidget> {
 
-  List<String> _val = [];
+  String _val = '';
   @override
   void didChangeDependencies()
   {

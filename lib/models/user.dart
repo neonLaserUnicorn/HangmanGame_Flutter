@@ -5,6 +5,8 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class User
 {
+
+  
   @HiveField(0, defaultValue: 'Guest')
   String name = 'Guest';
 
@@ -12,4 +14,9 @@ class User
   int? scores;
   
   User(this.name, this.scores);
+
+  @override
+  String toString() {
+    return '$name: $scores';
+  }
 }

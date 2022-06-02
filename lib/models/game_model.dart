@@ -3,12 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hangman/models/screen_model.dart';
+import 'package:hangman/models/user.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive/hive.dart';
 
 class GameModel extends ChangeNotifier
 {
   String? answer;
-  List<String> question = [];
+  String question = "";
   bool _res = true;
   bool _isNew = true;
   bool _isLose = false;
@@ -21,6 +23,8 @@ class GameModel extends ChangeNotifier
   int scores = 0;
   final BuildContext _context;
   final hangman = HangmanModel();
+  final String loser = 'You lose:(';
+
 
   GameModel(this._context)
   {
@@ -30,7 +34,11 @@ class GameModel extends ChangeNotifier
 
   Future gameOver() async
   {
-    
+    final leaderboard = await Hive.openBox('leaderboard');
+    final user = User('Guest', scores);
+    await leaderboard.add(user);
+    print(leaderboard.toMap());
+    leaderboard.close();
     return Future.delayed(const Duration(seconds: 1), 
       ()=>Navigator.of(_context).pushReplacementNamed('/'));
   }
@@ -48,24 +56,23 @@ class GameModel extends ChangeNotifier
         await words.writeList();
       }    
       answer = words.pickRandom();
-      question.clear();
+      question = '';
       int end = answer!.length;
       for (int i = 0; i < end; ++i)
       {
-        question.add('_');
+        question+='_';
       }
       print(answer);
       _isNew = true;
       notifyListeners();
       return;
     }
-    question.clear();
-    const String loser = 'You lose:(';
-    int end = loser.length;
-    for (int i = 0; i < end; ++i)
-      {
-        question.add(loser[i]);
-      }
+    question = loser;
+    // int end = loser.length;
+    // for (int i = 0; i < end; ++i)
+    //   {
+    //     question.add(loser[i]);
+    //   }
     _isNew = true;
     notifyListeners();
   }
@@ -76,14 +83,19 @@ class GameModel extends ChangeNotifier
     let = let.toLowerCase();
     _res = false;
     h=let;
+    String tmp = '';
     for (int i = 0; i < answer!.length; ++i)
     {
       if(answer![i] == let)
       {
         _res = true;
-        question[i] = let;
+        tmp+=let;
+        continue;
       }
+      tmp+=question[i];
+
     }
+    question = tmp;
     if(!_res)
     {
       mistake();
@@ -102,7 +114,7 @@ class GameModel extends ChangeNotifier
     check(answer![i]);
   }
 
-  bool isWin() => !question.contains('_');
+  bool isWin() => !question.contains('_') && question != loser;
 
   void mistake()  async
   {
@@ -111,7 +123,7 @@ class GameModel extends ChangeNotifier
     {
       lives--;
       _isLose = true;
-      notifyListeners();
+      // notifyListeners();
       if(lives==0)
       {
         reset();
