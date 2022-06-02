@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hangman/models/screen_model.dart';
 import 'package:hangman/models/user.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:hive/hive.dart';
 
 class GameModel extends ChangeNotifier
 {
@@ -32,11 +31,54 @@ class GameModel extends ChangeNotifier
     reset();
   }
 
+  List<dynamic> _sortLeaderboard(List<dynamic> toSort)
+  {
+    var last =toSort[toSort.length-1];
+    for(int i = 0; i < toSort.length-1; ++i)
+    {
+      if(last > toSort[i])
+      {
+        for(int j = toSort.length-1; j > i; --j)
+        {
+          toSort[j] = toSort[j-1];
+        }
+        toSort[i] = last;
+        break;
+      }
+    }
+    // for(int i = 0; i < toSort.length-1; ++i)
+    // {
+    //   if(toSort[i] is User)
+    //   {
+    //     int max = i;
+    //     for(int j = i+1; j < toSort.length; ++j)
+    //     {
+    //       if(toSort[j] > toSort[max])
+    //       {
+    //         max = j;
+    //       }
+    //     }
+    //     User tmp = toSort[i];
+    //     toSort[i]= toSort[max];
+    //     toSort[max] = tmp;
+    //   }
+    // }
+
+      return toSort;
+  }
+
   Future gameOver() async
   {
     final leaderboard = await Hive.openBox('leaderboard');
     final user = User('Guest', scores);
-    await leaderboard.add(user);
+    List<dynamic> leadTMP = List.from(leaderboard.toMap().values);
+    leadTMP.add(user);
+    leadTMP = _sortLeaderboard(leadTMP);
+    leadTMP = List.from(leadTMP.getRange(0, 6));
+    leaderboard.clear();
+    for (var value in leadTMP) {
+      await leaderboard.add(value);
+    }
     print(leaderboard.toMap());
     leaderboard.close();
     return Future.delayed(const Duration(seconds: 1), 
@@ -68,11 +110,7 @@ class GameModel extends ChangeNotifier
       return;
     }
     question = loser;
-    // int end = loser.length;
-    // for (int i = 0; i < end; ++i)
-    //   {
-    //     question.add(loser[i]);
-    //   }
+  
     _isNew = true;
     notifyListeners();
   }
@@ -123,7 +161,6 @@ class GameModel extends ChangeNotifier
     {
       lives--;
       _isLose = true;
-      // notifyListeners();
       if(lives==0)
       {
         reset();

@@ -19,4 +19,8 @@ class User
   String toString() {
     return '$name: $scores';
   }
+  bool operator>(User b)
+  {
+    return scores! > b.scores!;
+  }
 }
