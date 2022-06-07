@@ -31,55 +31,42 @@ class GameModel extends ChangeNotifier
     reset();
   }
 
-  List<dynamic> _sortLeaderboard(List<dynamic> toSort)
+  List<User> _sortLeaderboard(List<User> toSort)
   {
-    var last =toSort[toSort.length-1];
+    
     for(int i = 0; i < toSort.length-1; ++i)
     {
-      if(last > toSort[i])
-      {
-        for(int j = toSort.length-1; j > i; --j)
+        int max = i;
+        for(int j = i+1; j < toSort.length; ++j)
         {
-          toSort[j] = toSort[j-1];
+          if(toSort[j] > toSort[max])
+          {
+            max = j;
+          }
         }
-        toSort[i] = last;
-        break;
-      }
+        User tmp = toSort[i];
+        toSort[i]= toSort[max];
+        toSort[max] = tmp;
     }
-    // for(int i = 0; i < toSort.length-1; ++i)
-    // {
-    //   if(toSort[i] is User)
-    //   {
-    //     int max = i;
-    //     for(int j = i+1; j < toSort.length; ++j)
-    //     {
-    //       if(toSort[j] > toSort[max])
-    //       {
-    //         max = j;
-    //       }
-    //     }
-    //     User tmp = toSort[i];
-    //     toSort[i]= toSort[max];
-    //     toSort[max] = tmp;
-    //   }
-    // }
 
       return toSort;
   }
 
   Future gameOver() async
   {
-    final leaderboard = await Hive.openBox('leaderboard');
+    final leaderboard = await Hive.openBox<User>('leaderboard');
+    --scores;
     final user = User('Guest', scores);
-    List<dynamic> leadTMP = List.from(leaderboard.toMap().values);
+    List<User> leadTMP = List.from(leaderboard.toMap().values);
     leadTMP.add(user);
     leadTMP = _sortLeaderboard(leadTMP);
-    leadTMP = List.from(leadTMP.getRange(0, 6));
-    leaderboard.clear();
-    for (var value in leadTMP) {
-      await leaderboard.add(value);
+    leadTMP = List.from(leadTMP.getRange(0, 5));
+    print(leadTMP);
+    await leaderboard.clear();
+    for (int i = 0; i < leadTMP.length; ++i) {
+      await leaderboard.add(leadTMP[i]);
+      print(leaderboard.toMap());
     }
-    print(leaderboard.toMap());
     leaderboard.close();
     return Future.delayed(const Duration(seconds: 1), 
       ()=>Navigator.of(_context).pushReplacementNamed('/'));

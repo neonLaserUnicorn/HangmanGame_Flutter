@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/screens/game_screen.dart';
 import 'package:hangman/screens/start_screen.dart';
+import 'package:hangman/screens/high_scores_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hangman/models/user.dart';
 
@@ -20,10 +21,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         backgroundColor: const Color.fromRGBO(100, 30, 200, 100),
-        // colorScheme: const ColorScheme.dark(
-        //   secondary: Color.fromARGB(206, 67, 23, 128),
-        //   primary:Color.fromRGBO(100, 30, 200, 100),
-        // ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(
             fontFamily: 'PatrickHand',
@@ -45,8 +42,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context)=> const StartScreen(),
         '/game': (context)=> const GameWidget(),
+        '/high_scores': (context){ 
+          return  const LeaderboardWidget();
+        },
       },
       initialRoute: '/',
       );
   }
 }
+
+
+

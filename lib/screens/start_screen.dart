@@ -41,7 +41,8 @@ class MenuButton extends StatelessWidget {
         onPressed: onPress,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color?>(Colors.blue),
-          fixedSize: MaterialStateProperty.all<Size>(const Size(145, 50)),
+          minimumSize: MaterialStateProperty.all<Size>(const Size(150, 50)),
+          maximumSize: MaterialStateProperty.all<Size>(const Size(300, 50))
         ), 
         child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
       ),
@@ -62,12 +63,15 @@ class StartButton extends StatelessWidget {
 class HighScoreButton extends StatelessWidget {
   const HighScoreButton ({Key? key }) : super(key: key);
 
-  void highScore()
+  void highScore(BuildContext context)
   {
   }
   @override
   Widget build(BuildContext context) {
-    return MenuButton(onPress: highScore, text: 'HIGH SCORE');
+    return MenuButton(
+      onPress:()=> Navigator.of(context).pushNamed('/high_scores'),
+      text: 'HIGH SCORE'
+      );
   }
 }
 

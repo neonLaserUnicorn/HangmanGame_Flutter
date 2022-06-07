@@ -3,11 +3,11 @@ import 'package:hangman/models/game_model.dart';
 
 
 class AlphaButton extends StatefulWidget {
-  AlphaButton({ 
+  const AlphaButton({ 
     Key? key,
     required this.value, required this.isTap}) : super(key: key);
   final String value;
-  bool isTap; 
+  final bool isTap; 
   @override
   State<AlphaButton> createState() => _AlphaButtonState();
 }

@@ -6,22 +6,12 @@ class GameWidget extends StatelessWidget {
   const GameWidget({ Key? key }) : super(key: key);
   @override
   Widget build(BuildContext context) { 
-    // quest = words.pickRandom();
+    
     final model = GameModel(context);
     return GameModelProvider(
       model: model,
       child: Scaffold(
-        // appBar: PreferredSize(
-        //   preferredSize: const Size.fromHeight(40),
-        //   child: Container(
-        //     decoration: const BoxDecoration(
-        //       gradient: LinearGradient(
-        //         begin: Alignment.topCenter,
-        //         end: Alignment.bottomCenter,
-        //         colors: [Color.fromARGB(156, 124, 54, 221),Color.fromRGBO(100, 30, 200, 100)])
-        //     ),
-        //   ),
-        // ),
+       
         backgroundColor: Theme.of(context).backgroundColor,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -165,18 +155,19 @@ class _HintWidgetState extends State<HintWidget> {
   bool isTap = false;
   Color? color = Colors.white;
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final mod=GameModelProvider.watch(context);
-  //   mod?.addListener(() {
-  //     if(mod.isNew)
-  //     {
-  //       isTap = !mod.lose;
-  //       setState(() {});
-  //     }
-  //    });
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final mod=GameModelProvider.watch(context);
+    mod?.addListener(() {
+      if(mod.isNew)
+      {
+        isTap = false;
+        color = Colors.white;
+        setState(() {});
+      }
+     });
+  }
 
   @override
   Widget build(BuildContext context) {
